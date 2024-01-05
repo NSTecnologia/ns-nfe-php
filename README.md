@@ -1,13 +1,6 @@
-# NSSuiteClientPHP
+# NFe API
 
-Utilizando a NS API, este exemplo - criado em PHP - possui funcionalidades para consumir documentos fiscais eletrônicos em geral, como por exemplo: 
-+ NFe; 
-+ CTe; 
-+ NFCe;
-+ MDFe;
-+ BPe;
-
-Simplificando todos os projetos utilizados em um único exemplo, deixando mais pratica e facil a integração com a NS API.
+Utilizando a NS API, este exemplo - criado em PHP - possui funcionalidades para consumir documento fiscal eletrônico do tipo NF-e, deixando mais pratica e facil a integração com a NS API.
 
 ## Primeiros passos:
 
@@ -19,7 +12,7 @@ Para utilizar as funções de comunicação com a API, você precisa realizar os
 2. Copie para sua aplicação a pasta src, na qual contem todos as classes que serão utilizadas;
 3. Abra o seu projeto e importe a pasta copiada.
 
-Pronto! Agora, você já pode consumir a NS Suite API através do seu sistema. Todas as funcionalidades de comunicação foram implementadas na classe NSSuite.php.
+Pronto! Agora, você já pode consumir a NS NF-e API através do seu sistema. Todas as funcionalidades de comunicação foram implementadas na classe NFeAPI.php.
 
 ------
 
@@ -27,11 +20,11 @@ Pronto! Agora, você já pode consumir a NS Suite API através do seu sistema. T
 
 ### Realizando uma Emissão Sincrona:
 
-Para realizar uma emissão completa de uma NFe (utilizada para exemplo), você poderá utilizar a função emitirNFeSincrono da classe NSSuite. Veja abaixo sobre os parâmetros necessários, e um exemplo de chamada do método.
+Para realizar uma emissão completa de uma NFe, você poderá utilizar a função emitirNFeSincrono da classe NFeAPI. Veja abaixo sobre os parâmetros necessários, e um exemplo de chamada do método.
 
 ##### Parâmetros:
 
-**ATENÇÃO:** o **token** também é um parâmetro necessário e você deve, primeiramente, defini-lo na classe **NSSuite.php**, como pode ver abaixo:
+**ATENÇÃO:** o **token** também é um parâmetro necessário e você deve, primeiramente, defini-lo na classe **NFeAPI.php**, como pode ver abaixo:
 
 Parametros     | Descrição
 :-------------:|:-----------
@@ -47,10 +40,11 @@ exibeNaTela    | Se for baixado, exibir o PDF na tela após a autorização.Valo
 
 Após ter todos os parâmetros listados acima, você deverá fazer a chamada da função. Veja o código de exemplo abaixo:
 
-      $retorno = $NSSuite->emitirNFeSincrono($conteudo, $tpConteudo, $cnpjEmit, $tpDown, $tpAmb, $caminho, $exibeNaTela);
-      echo $retorno;
+      $retorno = $NFeAPI->emitirNFeSincrono($conteudo, $tpConteudo, $cnpjEmit, $tpDown, $tpAmb, $caminho, $exibeNaTela);
+      $retorno = json_decode($retorno, true);
+	  var_dump($retorno);
 
-A função emitirNFeSincrono fará o envio, a consulta e download do documento, utilizando as funções emitirDocumento, consultarStatusProcessamento e downloadDocumentoESalvar, presentes na classe NSSuite.php. Por isso, o retorno será um JSON com os principais campos retornados pelos métodos citados anteriormente. No exemplo abaixo, veja como tratar o retorno da função emitirNFeSincrono:
+A função emitirNFeSincrono fará o envio, a consulta e download do documento, utilizando as funções emitirDocumento, consultarStatusProcessamento e downloadDocumentoESalvar, presentes na classe NFeAPI.php. Por isso, o retorno será um JSON com os principais campos retornados pelos métodos citados anteriormente. No exemplo abaixo, veja como tratar o retorno da função emitirNFeSincrono:
 
 ##### Exemplo de tratamento de retorno:
 
@@ -71,7 +65,7 @@ O JSON retornado pelo método terá os seguintes campos: statusEnvio, statusCons
 Confira um código para tratamento do retorno, no qual pegará as informações dispostas no JSON de Retorno disponibilizado:
 
 
-    $resposta = $NSSuite->emitirNFeSincrono($conteudo, $tpConteudo, $cnpjEmit, $tpDown, $tpAmb, $caminho, $exibeNaTela);
+    $resposta = $NFeAPI->emitirNFeSincrono($conteudo, $tpConteudo, $cnpjEmit, $tpDown, $tpAmb, $caminho, $exibeNaTela);
 
     $statusEnvio = $resposta['statusEnvio'];
     $statusConsulta = $resposta['statusConsulta'];
@@ -105,11 +99,11 @@ Confira um código para tratamento do retorno, no qual pegará as informações 
 
 ### Realizando um Cancelamento:
 
-Utilizando NFe como exemplo para o cancelamento deve-se ter em mente que você deverá usar a função cancelarDocumentoESalvar da classe NSSuite. Veja abaixo sobre os parâmetros necessários, e um exemplo de chamada do método.
+Utilizando o cancelamento de NF-e, deve-se ter em mente que você deverá usar a função cancelarDocumentoESalvar da classe NFeAPI. Veja abaixo sobre os parâmetros necessários, e um exemplo de chamada do método.
 
 ##### Parâmetros:
 
-**ATENÇÃO:** o **token** também é um parâmetro necessário e você deve, primeiramente, defini-lo na classe **NSSuite.php**, como pode ver abaixo:
+**ATENÇÃO:** o **token** também é um parâmetro necessário e você deve, primeiramente, defini-lo na classe **NFeAPI.php**, como pode ver abaixo:
 
 Parametros     | Descrição
 :-------------:|:-----------
@@ -124,7 +118,7 @@ Parametros     | Descrição
 
 Após ter todos os parâmetros listados acima, você deverá fazer a chamada da função. Veja o código de exemplo abaixo:
 
-    $NSSuite = new NSSuite;
+    $NFeAPI = new NFeAPI;
 
     $cancelarReqNFe = new CancelarReqNFe();
     $cancelarReqNFe->chNFe = '43190307364617000135550000000130621004621863';
@@ -139,9 +133,10 @@ Após ter todos os parâmetros listados acima, você deverá fazer a chamada da 
     $down->nSeqEvento = '1';
     $down->tpAmb = '2';
     $down->chNFe = '43190307364617000135550000000130621004621863';
-    $retorno = $NSSuite->cancelarDocumentoESalvar('55', $cancelarReqNFe, $down, './Notas', '43190307364617000135550000000130621004621863', true);
+    $retorno = $NFeAPI->cancelarDocumentoESalvar('55', $cancelarReqNFe, $down, './Notas', '43190307364617000135550000000130621004621863', true);
+	var_dump($retorno);
     
-A função **cancelarDocumentoESalvar** fará o cancelamento de qualquer documento que possa ser cancelado e fazendo o download do evento feito, neste caso hipotético, uma NFe, utilizando as funções cancelarDocumento e downloadEventoESalvar, presentes na classe NSSuite.php. Dessa forma, o retorno será um JSON com os principais campos retornados pelos métodos citados anteriormente. No exemplo abaixo, veja o retorno da nossa API em um cancelamento:
+A função **cancelarDocumentoESalvar** fará o cancelamento e download da NF-e, utilizando as funções cancelarDocumento e downloadEventoESalvar, presentes na classe NFeAPI.php. Dessa forma, o retorno será um JSON com os principais campos retornados pelos métodos citados anteriormente. No exemplo abaixo, veja o retorno da nossa API em um cancelamento:
 
 ##### Exemplo de retorno de cancelamento:
 
@@ -163,11 +158,11 @@ A função **cancelarDocumentoESalvar** fará o cancelamento de qualquer documen
 
 ### Realizando uma Correção de Documento:
 
-Utilizando NFe como exemplo para a criação de uma carta de correção, deve-se ter em mente que você deverá usar a função corrigirDocumentoESalvar da classe NSSuite. Veja abaixo sobre os parâmetros necessários, e um exemplo de chamada do método.
+Utilizando NFe para a criação de uma carta de correção, deve-se ter em mente que você deverá usar a função corrigirDocumentoESalvar da classe NFeAPI. Veja abaixo sobre os parâmetros necessários, e um exemplo de chamada do método.
 
 ##### Parâmetros:
 
-**ATENÇÃO:** o **token** também é um parâmetro necessário e você deve, primeiramente, defini-lo na classe **NSSuite.php**, como pode ver abaixo:
+**ATENÇÃO:** o **token** também é um parâmetro necessário e você deve, primeiramente, defini-lo na classe **NFeAPI.php**, como pode ver abaixo:
 
 Parametros     | Descrição
 :-------------:|:-----------
@@ -197,9 +192,10 @@ Após ter todos os parâmetros listados acima, você deverá fazer a chamada da 
     $downTeste->tpDown = 'XP';
     $downTeste->tpEvento = 'CCE';
 
-    $retorno = NSSuite->corrigirDocumentoESalvar('55', $cceTeste, $downTeste, './Notas', '43190207364617000135550000000129281004621862', '1', true);
+    $retorno = NFeAPI->corrigirDocumentoESalvar('55', $cceTeste, $downTeste, './Notas', '43190207364617000135550000000129281004621862', '1', true);
+	var_dump($retorno);
     
-A função corrigirDocumentoESalvar irá vincular um CCe (carta de correção) ao projeto selecionado, neste caso hipotético, à uma NFe, utilizando as funções corrigirDocumento e downloadEventoESalvar, presentes na classe NSSuite.php. Dessa forma, o retorno será um JSON com os principais campos retornados pelos métodos citados anteriormente. No exemplo abaixo, veja o retorno da nossa API em uma CCe:
+A função corrigirDocumentoESalvar irá vincular um CCe (carta de correção) à NFe, utilizando as funções corrigirDocumento e downloadEventoESalvar, presentes na classe NFeAPI.php. Dessa forma, o retorno será um JSON com os principais campos retornados pelos métodos citados anteriormente. No exemplo abaixo, veja o retorno da nossa API em uma CCe:
 
 ##### Exempo de retorno de correção de documento:
 
@@ -222,11 +218,11 @@ A função corrigirDocumentoESalvar irá vincular um CCe (carta de correção) a
 
 ### Realizando uma Inutilização de Numeração de um Documento:
 
-Utilizando NFe como exemplo para a inutilização de numeração, deverá ser utilizada a função inutilizarNumeracaoESalvar da classe NSSuite. Veja abaixo sobre os parâmetros necessários, e um exemplo de chamada do método.
+Para a inutilização de numeração de NFe, deverá ser utilizada a função inutilizarNumeracaoESalvar da classe NFeAPI. Veja abaixo sobre os parâmetros necessários, e um exemplo de chamada do método.
 
 ##### Parâmetros:
 
-**ATENÇÃO:** o **token** também é um parâmetro necessário e você deve, primeiramente, defini-lo na classe **NSSuite.php**, como pode ver abaixo:
+**ATENÇÃO:** o **token** também é um parâmetro necessário e você deve, primeiramente, defini-lo na classe **NFeAPI.php**, como pode ver abaixo:
 
 Parametros     | Descrição
 :-------------:|:-----------
@@ -238,7 +234,7 @@ Parametros     | Descrição
 
 Após ter todos os parâmetros listados acima, você deverá fazer a chamada da função. Veja o código de exemplo abaixo:
 
-      $NSSuite = new NSSuite;
+      $NFeAPI = new NFeAPI;
       $inutilizarReq = new InutilizarReqNFe();
       $inutilizarReq->cUF = '43';
       $inutilizarReq->CNPJ = '07364617000135';
@@ -250,9 +246,10 @@ Após ter todos os parâmetros listados acima, você deverá fazer a chamada da 
       $inutilizarReq->xJust = 'Inutilizacao realizada para teste de integracao';
 
       $caminho = '.\Notas';
-      $retorno = $NSSuite->inutilizarNumeracaoESalvar('55', $inutilizarReq, $caminho);
+      $retorno = $NFeAPI->inutilizarNumeracaoESalvar('55', $inutilizarReq, $caminho);
+	  var_dump($retorno);
     
-A função inutilizarNumeracaoESalvar irá inutilizar a numeração do documento, neste caso hipotético, à uma NFe, presente na classe NSSuite.php. Dessa forma, o retorno será um JSON com os principais campos retornados pelos métodos citados anteriormente. No exemplo abaixo, veja o retorno da nossa API de um inutilização de numeração:
+A função inutilizarNumeracaoESalvar irá inutilizar a numeração da NFe, presente na classe NFeAPI.php. Dessa forma, o retorno será um JSON com os principais campos retornados pelos métodos citados anteriormente. No exemplo abaixo, veja o retorno da nossa API de um inutilização de numeração:
 
 ##### Exempo de retorno de correção de documento:
 
