@@ -107,7 +107,7 @@ Utilizando o cancelamento de NF-e, deve-se ter em mente que você deverá usar a
 
 Parametros     | Descrição
 :-------------:|:-----------
-**modelo**            | Conteúdo de emissão do documento.<ul> <li>"63" (BPe);</li> <li>"57" (CTe);</li> <li>"67" (CTeOS);</li> <li>"58" (MDFe);</li> <li>"65" (NFCe);</li> <li>"55" (NFe);</li> </ul>
+**modelo**            | Conteúdo de emissão do documento.<ul> <li>"55" (NFe);</li> </ul>
 **CancelarReq**       | JSON contendo as informações de uma requisição de cancelamento de documento
 **DownloadEventoReq** | JSON contendo as informações de uma requisição de Download de Evento
 **caminho**           | Caminho onde devem ser salvos os documentos baixados.
@@ -166,7 +166,7 @@ Utilizando NFe para a criação de uma carta de correção, deve-se ter em mente
 
 Parametros     | Descrição
 :-------------:|:-----------
-**modelo**            | Conteúdo de emissão do documento.<ul> <li>"63" (BPe);</li> <li>"57" (CTe);</li> <li>"67" (CTeOS);</li> <li>"58" (MDFe);</li> <li>"65" (NFCe);</li> <li>"55" (NFe);</li> </ul>
+**modelo**            | Conteúdo de emissão do documento.<ul> <li>"55" (NFe);</li> </ul>
 **CorrigirReq**       | JSON contendo as informações de uma requisição de carta de correção
 **DownloadEventoReq** | JSON contendo as informações de uma requisição de Download de Evento
 **caminho**           | Caminho onde devem ser salvos os documentos baixados.
@@ -226,7 +226,7 @@ Para a inutilização de numeração de NFe, deverá ser utilizada a função in
 
 Parametros     | Descrição
 :-------------:|:-----------
-**modelo**            | Conteúdo de emissão do documento.<ul> <li>"57" (CTe);</li> <li>"67" (CTeOS);</li> <li>"65" (NFCe);</li> <li>"55" (NFe);</li> </ul>
+**modelo**            | Conteúdo de emissão do documento.<ul> <li>"55" (NFe);</li> </ul>
 **InutilizarReq**     | JSON contendo as informações de uma requisição de inutilização de numeração
 **caminho**           | Caminho onde devem ser salvos os documentos baixados.
 
